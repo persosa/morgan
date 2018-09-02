@@ -86,6 +86,7 @@ function morgan (format, options) {
   // stream
   var buffer = opts.buffer
   var stream = opts.stream || process.stdout
+  var objectMode = !!opts.objectMode
 
   // buffering support
   if (buffer) {
@@ -127,7 +128,12 @@ function morgan (format, options) {
       }
 
       debug('log request')
-      stream.write(line + '\n')
+      
+      if (objectMode) {
+        stream.write(line);
+      } else {
+        stream.write(line + '\n')
+      }
     };
 
     if (immediate) {
